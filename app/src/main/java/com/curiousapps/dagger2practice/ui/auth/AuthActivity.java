@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.RequestManager;
 import com.curiousapps.dagger2practice.R;
@@ -18,9 +19,10 @@ public class AuthActivity extends DaggerAppCompatActivity {
 
     private static final String TAG = "AuthActivity";
     private AuthViewModel viewModel;
-//
-//    @Inject
-//    ViewModelProviderFactory providerFactory;
+
+    @Inject //This Inject command breaks BaseApplication. DaggerAppComponent becomes
+                // unavailable to the application in the generated code. I don't yet know why.
+    ViewModelProviderFactory providerFactory;
 
     @Inject
     Drawable logo;
@@ -32,6 +34,8 @@ public class AuthActivity extends DaggerAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+
+        viewModel = new ViewModelProvider(this, providerFactory).get(AuthViewModel.class);
 
         setLogo();
     }
